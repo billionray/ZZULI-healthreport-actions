@@ -1,2 +1,2 @@
 # ZZULI-healthreport-actions
-a Github actions
+Just a Github actions
