@@ -13,7 +13,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
   schedule:
-    - cron: '1 0,1,2,3,4,5,6,7,8 * * *'
+    - cron: '1 0,1,2,3 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -51,5 +51,5 @@ jobs:
         run: |
           sudo cp -p ./chrome/chromedriver /usr/bin/
           chmod -R 777 /usr/bin/chromedriver
-          cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && date && python teSt.py
+          cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && date && python run.py
          
