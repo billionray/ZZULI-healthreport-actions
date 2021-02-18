@@ -1,6 +1,5 @@
 import time
 import os
-os.environ
 from Services import service
 datetime = time.strftime("%Y-%m-%d", time.localtime())  # 获取日期 YY-MM-DD
 日期=datetime
