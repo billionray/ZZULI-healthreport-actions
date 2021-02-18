@@ -153,7 +153,7 @@ def service(username,password,mobile,homemobile,gpslocation,lat,lon,my_user,my_s
             msg = MIMEText(user_dict.get("user_code", ) + ':' + '打卡' + yesorno + '！', 'plain', 'utf-8')
             msg['From'] = formataddr(["打卡提醒", my_sender])  # 括号里的对应发件人邮箱昵称、发件人邮箱账号
             msg['To'] = formataddr(["您好，订阅者", my_user])  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
-            msg['Subject'] = "打卡"+yesorno+datetime  # 主题
+            msg['Subject'] = "打卡"+yesorno+datetime+lat  # 主题
 
             server = smtplib.SMTP_SSL(SMTPdomain, 465)  # 使用SSL发送
             server.login(my_sender, SMTPauth)  # SMTP密码，这里是我的的密码
