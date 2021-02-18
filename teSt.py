@@ -3,7 +3,7 @@ import os
 from Services import service
 datetime = time.strftime("%Y-%m-%d", time.localtime())  # 获取日期 YY-MM-DD
 日期=datetime
-username = os.environ('USERNAME')
+username = os.environ['USERNAME']
 password= os.environ('PASSWORD')
 mobile=os.environ('mobile')
 homemobile=os.environ('HOMEMOBILE')
