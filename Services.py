@@ -1,11 +1,10 @@
 from selenium import webdriver
-import time
-import json
-import requests
-import smtplib  # 加载邮箱模块
+import time,json,requests,smtplib
+# 加载邮箱模块
 from email.mime.text import MIMEText
 from email.utils import formataddr
 debug_mode=0 #调试模式
+mail=1
 ##############信息填写################
 #None
 ##############登录模块开始################
@@ -60,7 +59,8 @@ def service(username,password,mobile,homemobile,gpslocation,lat,lon,my_user,my_s
         if debug_mode == 1:
             print(dakaurl)
         selenium_cookies = driver.get_cookies()
-    time.sleep(0.5)
+    time.sleep(0.1)
+
     ##############链接获取结束################
     ##############cookie处理及header处理开始################
     cookies = {}
@@ -122,14 +122,14 @@ def service(username,password,mobile,homemobile,gpslocation,lat,lon,my_user,my_s
         "user_code": user_dict.get("user_code", ), "user_name": user_dict.get("user_name", ), "id_card": user_dict.get("id_card", ), "date": datetime, "sex": user_dict.get("sex", ),
         "age": user_dict.get("age", ), "org": user_dict.get("org", ), "year": user_dict.get("year", ), "spec": user_dict.get("spec", ), "class": user_dict.get("class", ), "region": "", "area": "",
         "build": "", "dorm": "", "mobile": mobile, "jt_mobile": homemobile, "province": user_dict.get("province", ), "city": user_dict.get("city", ),
-        "district": user_dict.get("district", ), "address": user_dict.get("address", ), "hjdz": "", "hj_province": "", "hj_city": "", "hj_district": "",
+        "district": user_dict.get("district", ), "address": user_dict.get("address", ), "hjdz": user_dict.get("hjdz", ), "hj_province": user_dict.get("hj_province", ), "hj_city": user_dict.get("hj_city", ), "hj_district": user_dict.get("hj_district", ),
         "out": "否",
         "out_address": "[{\"start_date\":\"\",\"end_date\":\"\",\"province\":\"\",\"city\":\"\",\"district\":\"\",\"area\":\"\",\"address\":\"\"}]",
         "hb": "否", "hb_area": "", "hn": "否", "hn_area": "", "lat": lat, "lon": lon, "gcj_lat": lat,
         "gcj_lon": lon, "jz_address": gpslocation, "jz_province": user_dict.get("province", ), "jz_city": user_dict.get("city", ),
         "jz_district": user_dict.get("district", ), "jz_sfyz": "是", "sj_province": "", "sj_city": "", "sj_district": "", "temp": "正常",
         "jrzz": "无", "jzqk": "", "stzk": "无症状", "jcbl": "否", "jcqk": "", "yqgl": "否", "glrq": "", "gljc": "", "glp": "",
-        "glc": "", "gld": "", "gla": "", "glyy": "", "yjs": 0, "other": "", "hb_date": "", "jz_qzbl": "", "tz_qzbl": "",
+        "glc": "", "gld": "", "gla": "", "glyy": "", "yjs": 0, "other": "无", "hb_date": "", "jz_qzbl": "", "tz_qzbl": "",
         "tz_province": "", "tz_city": "", "tz_district": "", "tz_area": "", "tz_address": "", "jc_yqjc": "", "jc_jcrq": "",
         "jc_province": "", "jc_city": "", "jc_district": "", "jc_area": "", "jc_address": "", "qz_yqbl": "否", "qz_yqrq": "",
         "zl_province": "", "zl_city": "", "zl_district": "", "zl_area": "", "zl_address": "", "zl_sfzy": "", "zl_zyrq": "",
@@ -178,14 +178,26 @@ def service(username,password,mobile,homemobile,gpslocation,lat,lon,my_user,my_s
             return 'daka ok mail faild'
 
     else:
-        print("Mission Failed,Check network or server now")
-        ret = mail("失败")
-        if ret:
-            print("mail ok")
-            return'daka faild mail faild'
+        print("Retry!")
+        retry = requests.post("http://msg.zzuli.edu.cn/xsc/add", data=datajson.encode(), cookies=cookies, headers=headers)
+        if retry.status_code == 200:
+            print("---------------DAKA Success---------------")
+            ret = mail("成功")
+            if ret:
+                print("mail ok")
+                return 'daka ok mail ok '
+            else:
+                print("mail failed")
+                return 'daka ok mail faild'
         else:
-            print("mail failed")
-            return'daka faild mail faild'
+            print("Mission Failed,Check network or server now")
+            ret = mail("失败")
+            if ret:
+                print("mail ok")
+                return'daka faild mail faild'
+            else:
+                print("mail failed")
+                return'daka faild mail faild'
     #结束所有进程，以免内存占用过高
 
 if __name__=='__main__':
