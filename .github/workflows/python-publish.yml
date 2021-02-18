@@ -36,6 +36,18 @@ jobs:
       - name: 'Install requirements'
         run: pip install -r requirements.txt
       - name: 'Working'
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          MOBILE: ${{ secrets.MOBILE }}
+          HOMEMOBILE: ${{ secrets.HOMEMOBILE }}
+          GPS: ${{ secrets.GPS }}
+          LAT: ${{ secrets.LAT }}
+          LON: ${{ secrets.LON }}
+          USER: ${{ secrets.USER }}
+          SENDER: ${{ secrets.SENDER }}
+          SMTPDOMAIN: ${{ secrets.SMTPDOMAIN }}
+          SMTPAUTH: ${{ secrets.SMTPAUTH }}
         run: |
           sudo cp -p ./chrome/chromedriver /usr/bin/
           chmod -R 777 /usr/bin/chromedriver
